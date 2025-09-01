@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using ChatBot.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,8 @@ namespace ChatBot.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
+        public object ClaimType { get; private set; }
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -18,13 +21,20 @@ namespace ChatBot.Controllers
             return View();
         }
 
-        public IActionResult ClientX()
+        public IActionResult ClientX(ChatBot.Models.ClientXModel xModel)
         {
+
             return View();
         }
 
-        public IActionResult ClientY()
+        public IActionResult ClientY(ChatBot.Models.ClientYModel yModel)
         {
+           var Claims = new List<Claim>
+           {
+               new Claim(ClaimTypes.NameIdentifier , yModel.Name),
+               new Claim("Id" , yModel.Id.ToString()),
+               new Claim("Message" , yModel.Message)
+           }
             return View();
         }
 

@@ -1,7 +1,20 @@
-﻿
+﻿@model ChatBot.Models.ClientYModel
+
+
 @{
     ViewData["Title"] = "ClientY";
 }
 
-<h1>ClientY</h1>
+
+
+<form asp-controller="Home" asp-action="ClientY" method="post">
+
+    <lable asp-for="Id">Add Your Id</lable>
+    <input asp-for="Id" />
+    <lable asp-for="Name">Add Your Name</lable>
+    <input asp-for="Name" />
+    <lable asp-for="Message">Add Your Message</lable>
+    <input asp-for="Message" />
+
+</form>
 
