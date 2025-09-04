@@ -10,7 +10,7 @@
 
 <form id="ChatForm">
 
-    <label for="UserIdInput">insert Id</label>
+    <label for="UserIdInput">Search Identity</label>
     <input id="UserIdInput" type="text" />
 
     <label for="NameInput">Add Your Name</label>
@@ -33,7 +33,7 @@
 
 
         const connection = new signalR.HubConnectionBuilder().
-            withUrl("/chatBot")
+            withUrl("/chatHub")
             .build();
 
         connection.on("ReciveMessage" , (message, userId) => {
@@ -51,7 +51,7 @@
             const message = document.getElementById("messageInput").value;
             const userId = document.getElementById("UserIdInput").value;
 
-            connection.invoke("sendMessage", message, userId)
+            connection.invoke("SendMessage", message, userId)
                 .catch(err => console.error("ssssssssss", err))
 
 

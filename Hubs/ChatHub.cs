@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ChatBot.Hubs
@@ -7,7 +8,7 @@ namespace ChatBot.Hubs
     {
         public async Task SendMessage(string _Message , string _user)
         {
-            var UserId = Context.User?.FindFirst("ID")?.Value;
+            var UserId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             await Clients.User(_user).SendAsync("ReciveMessage" , _Message , UserId );
         }
     }

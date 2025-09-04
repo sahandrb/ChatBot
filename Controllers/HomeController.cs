@@ -51,9 +51,8 @@ namespace ChatBot.Controllers
         {
             var Claims = new List<Claim>
                 {
-                new Claim(ClaimTypes.Name, xModel.Name),
-                new Claim("Id" , xModel.Id.ToString()),
-                new Claim("Message" , xModel.Message)
+                new Claim(ClaimTypes.NameIdentifier, xModel.Id.ToString()),
+                
                 };
             var identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
@@ -66,9 +65,7 @@ namespace ChatBot.Controllers
         {
             var Claims = new List<Claim>
            {
-               new Claim(ClaimTypes.NameIdentifier , yModel.Name),
-               new Claim("Id" , yModel.Id.ToString()),
-               new Claim("Message" , yModel.Message)
+               new Claim(ClaimTypes.NameIdentifier , yModel.Id.ToString()),
            };
             var identity = new ClaimsIdentity(Claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
