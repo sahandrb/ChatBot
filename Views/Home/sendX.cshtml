@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "sendX";
+}
+
+<h1>sendX</h1>
+
+
+
+<h1>ClientXView</h1>
+
+
+
+<form id="ChatForm">
+
+    <label for="UserIdInput">insert Id</label>
+    <input id="UserIdInput" type="text" />
+
+    <label for="NameInput">Add Your Name</label>
+    <input id="NameInput" />
+
+    <label for="messageInput">Add Your Message</label>
+    <input id="messageInput" />
+
+    <button type="submit" class="btn btn-primary">Send Message</button>
+</form>
+
+<h1>recived message</h1>
+<ul id="recived"></ul>
+
+
+
+
+
+
+    <script src="~/js/signalr.js"></script>
+    <script>
+
+
+        const connection = new signalR.HubConnectionBuilder().
+            withUrl("/chatBot")
+            .build();
+
+        connection.on("ReciveMessage" , (message, userId) => {
+            const li = document.createElement("li")
+
+                   li.textContent = `${userId}: ${message}`;
+                  document.getElementById("recived").appendChild(li);
+
+        });
+
+        connection.start().catch(err => console.error("signalR not connected"));
+
+        document.getElementById("ChatForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const message = document.getElementById("messageInput").value;
+            const userId = document.getElementById("UserIdInput").value;
+
+            connection.invoke("sendMessage", message, userId)
+                .catch(err => console.error("ssssssssss", err))
+
+
+
+        });
+    </script>
+
+
