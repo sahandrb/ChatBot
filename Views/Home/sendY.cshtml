@@ -358,7 +358,7 @@
         withUrl("/chatHub")
         .build();
 
-    connection.on("ReciveMessage" , (message, userId) => {
+    connection.on("ReciveMessage" , (message, userId ) => {
         const li = document.createElement("li")
 
                li.textContent = ` ${message}`;
