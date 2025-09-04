@@ -8,7 +8,7 @@ namespace ChatBot.Hubs
         public async Task SendMessage(string _Message , string _user)
         {
             var UserId = Context.User?.FindFirst("ID")?.Value;
-            await Clients.Client(_user).SendAsync("ReciveMessage" , _Message , UserId );
+            await Clients.User(_user).SendAsync("ReciveMessage" , _Message , UserId );
         }
     }
 }
