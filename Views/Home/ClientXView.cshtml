@@ -1,18 +1,388 @@
 ﻿@model ChatBot.Models.ClientXModel
 @{
     ViewData["Title"] = "ClientXView";
+    Layout = null;
 }
-<h1>ClientXView</h1>
 
 
 
-<form asp-controller="Home" asp-action="ClientX" method="post">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClientX - Message Sender</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <label asp-for="Id">Add Your Id</label>
-    <input asp-for="Id" />
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
 
-    <button type="submit" class="btn btn-primary">Send Message</button>
-</form>
+        .header {
+            margin-bottom: 40px;
+        }
 
+            .header h1 {
+                color: #2d3748;
+                font-size: 2.8rem;
+                font-weight: 700;
+                margin-bottom: 12px;
+                background: linear-gradient(135deg, #4f46e5, #7c3aed);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .header .subtitle {
+                color: #718096;
+                font-size: 1.1rem;
+                font-weight: 500;
+                margin-bottom: 8px;
+            }
+
+        .description {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .form-section {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .send-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 18px 24px;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+            color: #2d3748;
+            text-align: center;
+            font-weight: 500;
+        }
+
+            input[type="text"]:focus {
+                outline: none;
+                border-color: #4f46e5;
+                box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+                transform: translateY(-3px);
+                background: #f8fafc;
+            }
+
+            input[type="text"]::placeholder {
+                color: #cbd5e0;
+                font-weight: 400;
+            }
+
+        .btn {
+            width: 100%;
+            padding: 20px 32px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transition: left 0.5s;
+            }
+
+            .btn:hover::before {
+                left: 100%;
+            }
+
+            .btn:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
+            }
+
+            .btn:active {
+                transform: translateY(-2px);
+            }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 35px 0;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+            border: 1px solid #c7d2fe;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .info-title {
+            color: #3730a3;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-text {
+            color: #4338ca;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+
+            .feature-list li {
+                color: #4338ca;
+                font-size: 0.85rem;
+                padding: 4px 0;
+                position: relative;
+                padding-left: 20px;
+            }
+
+                .feature-list li::before {
+                    content: '✓';
+                    position: absolute;
+                    left: 0;
+                    color: #10b981;
+                    font-weight: bold;
+                }
+
+        /* Responsive design */
+        @@media (max-width: 640px) {
+            .container
+
+        {
+            padding: 40px 30px;
+            margin: 15px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+        }
+
+        input[type="text"], .btn {
+            padding: 16px 20px;
+        }
+
+        .btn {
+            font-size: 1rem;
+            padding: 18px 24px;
+        }
+
+        }
+
+        /* Animation for the form */
+        @@keyframes fadeInUp {
+            from
+
+        {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        }
+
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Pulse animation for send icon */
+        @@keyframes pulse {
+            0%
+
+        {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
+
+        .send-icon {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ClientX</h1>
+            <p class="subtitle">Direct Message Sender</p>
+            <p class="description">Send targeted messages to specific clients</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-section">
+            <h2 class="section-title">
+                <span class="send-icon">📤</span>
+                Message Dispatch
+            </h2>
+
+            <form asp-controller="Home" asp-action="ClientX" method="post">
+                <div class="form-group">
+                    <label for="Id">Client Identifier</label>
+                    <input asp-for="Id" type="text" placeholder="Enter client ID or identifier..." />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Message To</button>
+            </form>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">How it works</div>
+            <div class="info-text">
+                Enter the unique client identifier to send a direct message to the specified recipient.
+            </div>
+            <ul class="feature-list">
+                <li>Instant message delivery</li>
+                <li>Secure client targeting</li>
+                <li>Real-time processing</li>
+                <li>Delivery confirmation</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Add interactive behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const input = document.querySelector('input[asp-for="Id"]');
+            const form = document.querySelector('form');
+            const button = document.querySelector('.btn');
+
+            // Input focus effects
+            input.addEventListener('focus', function() {
+                this.style.background = '#f0f4ff';
+            });
+
+            input.addEventListener('blur', function() {
+                this.style.background = '#fff';
+            });
+
+            // Form validation and submission
+            form.addEventListener('submit', function(e) {
+                if (!input.value.trim()) {
+                    e.preventDefault();
+                    input.style.borderColor = '#ef4444';
+                    input.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.1)';
+                    input.focus();
+
+                    setTimeout(() => {
+                        input.style.borderColor = '#e2e8f0';
+                        input.style.boxShadow = 'none';
+                    }, 2000);
+
+                    return false;
+                }
+
+                // Loading state
+                button.innerHTML = 'Sending Message...';
+                button.style.background = '#6b7280';
+                button.disabled = true;
+            });
+
+            // Real-time input formatting
+            input.addEventListener('input', function() {
+                this.value = this.value.replace(/[^a-zA-Z0-9-_]/g, '');
+            });
+        });
+    </script>
+</body>
+</html>
 
