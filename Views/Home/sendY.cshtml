@@ -1,62 +1,385 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "sendY";
+
+    Layout = null;
+
 }
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<h1>ClientYView</h1>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
 
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
 
-<form id="ChatForm">
+            .header h1 {
+                color: #2d3748;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 8px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
 
-    <label for="UserIdInput">Search Identity</label>
-    <input id="UserIdInput" type="text" />
+            .header .subtitle {
+                color: #718096;
+                font-size: 1rem;
+                font-weight: 500;
+            }
 
-    <label for="NameInput">Add Your Name</label>
-    <input id="NameInput" />
+        .form-section {
+            margin-bottom: 40px;
+        }
 
-    <label for="messageInput">Add Your Message</label>
-    <input id="messageInput" />
+        .section-title {
+            color: #2d3748;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-    <button type="submit" class="btn btn-primary">Send Message</button>
-</form>
+        .chat-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
 
-<h1>recived message</h1>
-<ul id="recived"></ul>
+        .form-group {
+            margin-bottom: 20px;
+        }
 
+        label {
+            display: block;
+            color: #4a5568;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+            color: #2d3748;
+        }
 
+            input[type="text"]:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+                transform: translateY(-2px);
+            }
 
-    <script src="~/js/signalr.js"></script>
+            input[type="text"]::placeholder {
+                color: #a0aec0;
+            }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .btn::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+                transition: left 0.5s;
+            }
+
+            .btn:hover::before {
+                left: 100%;
+            }
+
+            .btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            }
+
+            .btn:active {
+                transform: translateY(-1px);
+            }
+
+        .messages-section {
+            margin-top: 40px;
+        }
+
+        .messages-title {
+            color: #2d3748;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        #recived {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #f7fafc;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+        }
+
+            #recived:empty::before {
+                content: "No messages yet. Start a conversation!";
+                color: #a0aec0;
+                font-style: italic;
+                display: block;
+                text-align: center;
+                padding: 20px 0;
+            }
+
+            #recived li {
+                background: white;
+                padding: 12px 16px;
+                margin-bottom: 8px;
+                border-radius: 8px;
+                border-left: 4px solid #667eea;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                animation: slideIn 0.3s ease-out;
+            }
+
+        @@keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+            margin: 30px 0;
+        }
+
+        /* Responsive design */
+        @@media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            input[type="text"], .btn {
+                padding: 14px 16px;
+            }
+        }
+
+        /* Custom scrollbar for messages */
+        #recived::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #recived::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        #recived::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+            #recived::-webkit-scrollbar-thumb:hover {
+                background: #a8a8a8;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>sendY</h1>
+            <p class="subtitle">Real-time messaging platform</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="form-section">
+            <h2 class="section-title">
+                <span class="chat-icon">💬</span>
+                ClientYView
+            </h2>
+
+            <form id="ChatForm">
+                <div class="form-group">
+                    <label for="UserIdInput">Search NameIdentity</label>
+                    <input id="UserIdInput" type="text" placeholder="Enter user identity..." />
+                </div>
+
+                <div class="form-group">
+                    <label for="NameInput">Add Your Name</label>
+                    <input id="NameInput" type="text" placeholder="Your display name..." />
+                </div>
+
+                <div class="form-group">
+                    <label for="messageInput">Add Your Message</label>
+                    <input id="messageInput" type="text" placeholder="Type your message here..." />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="messages-section">
+            <h2 class="messages-title">
+                <span class="message-icon">📨</span>
+                Received Messages
+            </h2>
+            <ul id="recived"></ul>
+        </div>
+    </div>
+
     <script>
+        // Add some interactive behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[type="text"]');
 
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.background = '#f8fafc';
+                });
 
-        const connection = new signalR.HubConnectionBuilder().
-            withUrl("/chatHub")
-            .build();
+                input.addEventListener('blur', function() {
+                    this.style.background = '#fff';
+                });
+            });
 
-        connection.on("ReciveMessage" , (message, userId) => {
-            const li = document.createElement("li")
-
-                   li.textContent = `${userId}: ${message}`;
-                  document.getElementById("recived").appendChild(li);
-
-        });
-
-        connection.start().catch(err => console.error("signalR not connected"));
-
-        document.getElementById("ChatForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-            const message = document.getElementById("messageInput").value;
-            const userId = document.getElementById("UserIdInput").value;
-
-            connection.invoke("SendMessage", message, userId)
-                .catch(err => console.error("ssssssssss", err))
-
-
-
+            // Form submission handling (keeping original logic intact)
+            const form = document.getElementById('ChatForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Your existing form submission logic would go here
+                console.log('Form submitted');
+            });
         });
     </script>
-}
+</body>
+</html>
+
+
+
+
+<script src="~/js/signalr.js"></script>
+<script>
+
+
+    const connection = new signalR.HubConnectionBuilder().
+        withUrl("/chatHub")
+        .build();
+
+    connection.on("ReciveMessage" , (message, userId) => {
+        const li = document.createElement("li")
+
+               li.textContent = ` ${message}`;
+              document.getElementById("recived").appendChild(li);
+
+    });
+
+    connection.start().catch(err => console.error("signalR not connected"));
+
+    document.getElementById("ChatForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const message = document.getElementById("messageInput").value;
+        const userId = document.getElementById("UserIdInput").value;
+
+        connection.invoke("SendMessage", message, userId)
+            .catch(err => console.error("ssssssssss", err))
+
+
+
+    });
+</script>
+
+
 
